@@ -58,6 +58,7 @@ What is the sum of all of the gear ratios in your engine schematic?
 from utils import get_input_file
 
 VALID_SYMBOLS = ['-', '*', '/', '#', '&', '=', '$', '%', '@', '+']
+GEAR_PART = '*'
 
 
 """
@@ -184,8 +185,37 @@ def part_one(schematics: list[str]):
         answer += number
     print('Answer:' + str(answer))
 
+def part_two(schematics: list[str]):
+    counter = 0
+    gears = []
+    for line_number in range(0, len(schematics) - 1):
+        print('Line Number: ' + str(line_number))
+        counter += 1
+
+        for index, character in enumerate(schematics[line_number]):
+            if character == GEAR_PART:
+                print('FoundSymbol: ' + character)
+                numbers = []
+                if line_number == 0:
+                    numbers.extend(symbol_snake(index, schematics[line_number : line_number + 2]))
+                elif line_number == len(schematics) - 1:
+                    numbers.extend(symbol_snake(index, schematics[line_number - 1 : line_number]))
+                else:
+                    numbers.extend(symbol_snake(index, schematics[line_number - 1 : line_number + 2]))
+                if len(numbers) == 2:
+                    gears.append(numbers[0] * numbers[1])
+
+
+    print('EndAllBeAll: ' + str(gears))
+
+    answer = 0
+    for gear in gears:
+        answer += gear
+    print('Answer:' + str(answer))
+
 
 if __name__ == "__main__":
     INPUT_FILE = get_input_file('day-3.txt')
     lines = [line.strip() for line in open(INPUT_FILE)]
-    part_one(lines)
+    # part_one(lines)
+    part_two(lines)
